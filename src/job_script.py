@@ -1,7 +1,7 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
 
-schema = StructType([
+data_schema = StructType([
     StructField("price", IntegerType()),
     StructField("area", IntegerType()),
     StructField("bedrooms", IntegerType()),
@@ -11,13 +11,11 @@ schema = StructType([
     StructField("guestroom", StringType()),
     StructField("basement", StringType()),
     StructField("hotwaterheating", StringType()),
-    StructField("airconfitioning", StringType()),
+    StructField("airconditioning", StringType()),
     StructField("parking", IntegerType()),
-    StructField("prefaea", StringType()),
-    StructField("funishingstatus", StringType())
+    StructField("prefarea", StringType()),
+    StructField("furnishingstatus", StringType())
 ])
-
-spark = SparkSession.builder.appName('uat').getOrCreate()
-
-df = spark.read.csv("/FileStore/shared_uploads/madhusudantnm.1997@gmail.com/housing.csv", header=True, schema=schema)
-df.write.format("delta").mode("overwrite").saveAsTable("test_table")
+spark = SparkSession.builder.appName('UpdateDeltaTable').getOrCreate()
+df = spark.read.csv("/FileStore/shared_uploads/madhusudantnm.1997@gmail.com/housing.csv", header=True, schema=data_schema)
+df.write.format("delta").mode("overwrite").saveAsTable("housing_dataset")
